@@ -5,7 +5,7 @@
 <div class="cart well">
     <h3>Price per melon</h3>
     <p> {{ display_melon.price_str() }} </p>
-    <a class="btn btn-primary" href="/add_to_cart/{{display_melon.id}}">Add to Cart</a>
+    <a id= "cartLink" class="btn btn-primary" href="/add_to_cart/{{display_melon.id}}">Add to Cart</a>
 </div>
 <div class="melon-details">
     <h3>Product details</h3>
@@ -20,4 +20,13 @@
         {% endif %}
     </ul>
 </div>
+<script>
+cartLink = document.getElementById("cartLink");
+
+cartLink.addEventListener("click", function(e){
+    // e.preventDefault();
+    alert("Item added to cart!");
+    })
+
+</script>
 {% endblock %}

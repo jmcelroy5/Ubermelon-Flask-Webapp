@@ -33,7 +33,21 @@ def shopping_cart():
     """TODO: Display the contents of the shopping cart. The shopping cart is a
     list held in the session that contains all the melons to be added. Check
     accompanying screenshots for details."""
-    return render_template("cart.html")
+    
+    cart_items = session['cart']  # session itself is a dictionary.  'cart' is a key, so what we see are the list of values mapped to cart.
+
+    melon_details = []
+
+    for id, quantity in cart_items.iteritems():
+        melon = model.get_melon_by_id(id)
+        melon_dict = {
+            "name": melon.common_name,
+            "price": melon.price,
+            "quantity": quantity
+        }
+        melon_details.append(melon_dict)
+
+    return render_template("cart.html", melons = melon_details)
 
 @app.route("/add_to_cart/<int:id>")
 def add_to_cart(id):
@@ -44,7 +58,22 @@ def add_to_cart(id):
     shopping cart page, while displaying the message
     "Successfully added to cart" """
 
-    return "Oops! This needs to be implemented!"
+    id = str(id)
+
+    if 'cart' in session:
+        if id in session['cart']:
+            session['cart'][id] += 1
+        else:
+            session['cart'][id] = 1
+    else:
+        session['cart'] = {id:1}
+
+    return redirect("/cart")
+
+@app.route("/sessionclear", methods=["GET"])
+def sessionclear():
+    session.clear()
+    return "BOOM!"
 
 
 @app.route("/login", methods=["GET"])
