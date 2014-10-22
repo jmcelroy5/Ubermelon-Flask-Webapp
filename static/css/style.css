@@ -36,6 +36,12 @@ div.cart {
     margin-left: 30px;
 }
 
+.flashes{
+  background-color: #1c68bb;
+  color: white;
+  font-size: 24px;
+  padding: 7px 0 7px 20px;
+}
 
 .form-signin {
   max-width: 330px;

@@ -2,19 +2,22 @@
 {% block body %}
 <table class="table table-striped">
     <tr><th>Melon Name</th><th>Quantity</th><th>Price</th><th>Total</th></tr>
-{% for melon in melons %}
-<tr>
-    <td>{{ melon['name'] }}</td>
-    <td>{{ melon['quantity'] }}</td>
-    <td>{{ "${:.2f}".format(melon['price']) }}</td>
-    <td>{{ "${:.2f}".format(melon['quantity'] * melon['price']) }}</td>
-</tr>
-<!--     <tr><td>Charleston Gray Watermelon</td><td>2</td><td>$2.00</td><td>$4.00</td></tr>
-    <tr><td>Crenshaw</td><td>1</td><td>$2.00</td><td>$2.00</td></tr>
-    <tr><td>Ledmon Watermelon</td><td>2</td><td>$3.00</td><td>$6.00</td></tr>  -->
-{%endfor%}
+{% if melons %}
+	{% for melon in melons %}
+	<tr>
+	    <td>{{ melon['name'] }}</td>
+	    <td>{{ melon['quantity'] }}</td>
+	    <td>{{ "${:.2f}".format(melon['price']) }}</td>
+	    <td>{{ "${:.2f}".format(melon['quantity'] * melon['price']) }}</td>
+	</tr>
+	<!--     <tr><td>Charleston Gray Watermelon</td><td>2</td><td>$2.00</td><td>$4.00</td></tr>
+	    <tr><td>Crenshaw</td><td>1</td><td>$2.00</td><td>$2.00</td></tr>
+	    <tr><td>Ledmon Watermelon</td><td>2</td><td>$3.00</td><td>$6.00</td></tr>  -->
+	{%endfor%}
+{%endif%}
 
 </table>
 <!-- <h3>Total: cart </h3> -->
 <a href="/checkout" class="btn btn-large btn-primary">Check Out</a>
+<a href="/clearcart" class="btn btn-large btn-default">Clear Cart</a>
 {% endblock %}

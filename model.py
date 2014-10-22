@@ -18,8 +18,14 @@ class Melon(object):
     def __repr__(self):
         return "<Melon: %s, %s, %s>"%(self.id, self.common_name, self.price_str())
 
+# customer class used to store current user in the session
 class Customer(object):
-    pass
+    
+    def __init__(self, givenname, surname, email, cust_id):
+      self.first = givenname
+      self.last = surname
+      self.email = email
+      self.id = cust_id
 
 def connect():
     conn = sqlite3.connect("melons.db")
@@ -72,5 +78,30 @@ def get_melon_by_id(id):
     
     return melon
 
-def get_customer_by_email(email):
-    pass
+def get_customer_by_email(email, password):
+  cursor = connect()
+  query = """ SELECT givenname, surname, email, id
+              FROM Customers
+              WHERE email = ? AND password = ?;"""
+
+  cursor.execute(query, (email, password))
+
+  row = cursor.fetchone()
+
+  if not row: # If row is any kind of 0, empty container... 
+    return None
+  else:
+    customer = Customer(row[0],row[1],row[2],row[3])
+    return customer
+
+  # else:
+  #   customer.email = 
+
+  # customer = Customer()
+
+
+    
+
+
+
+

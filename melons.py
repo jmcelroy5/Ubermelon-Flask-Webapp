@@ -34,20 +34,24 @@ def shopping_cart():
     list held in the session that contains all the melons to be added. Check
     accompanying screenshots for details."""
     
-    cart_items = session['cart']  # session itself is a dictionary.  'cart' is a key, so what we see are the list of values mapped to cart.
+    if 'cart' in session:
+        if 'cart' != {}:
+            cart_items = session['cart']   
 
-    melon_details = []
+            melon_details = []
 
-    for id, quantity in cart_items.iteritems():
-        melon = model.get_melon_by_id(id)
-        melon_dict = {
-            "name": melon.common_name,
-            "price": melon.price,
-            "quantity": quantity
-        }
-        melon_details.append(melon_dict)
+            for id, quantity in cart_items.iteritems():
+                melon = model.get_melon_by_id(id)
+                melon_dict = {
+                    "name": melon.common_name,
+                    "price": melon.price,
+                    "quantity": quantity
+                }
+                melon_details.append(melon_dict)
 
-    return render_template("cart.html", melons = melon_details)
+            return render_template("cart.html", melons = melon_details)
+    else:
+        return render_template("cart.html", melons = None)
 
 @app.route("/add_to_cart/<int:id>")
 def add_to_cart(id):
@@ -68,6 +72,7 @@ def add_to_cart(id):
     else:
         session['cart'] = {id:1}
 
+    flash("Item added to cart.")
     return redirect("/cart")
 
 @app.route("/sessionclear", methods=["GET"])
@@ -75,17 +80,34 @@ def sessionclear():
     session.clear()
     return "BOOM!"
 
-
 @app.route("/login", methods=["GET"])
 def show_login():
     return render_template("login.html")
 
+# need a logout function - remove customer from session (?) and redirect to "logout " page
 
 @app.route("/login", methods=["POST"])
 def process_login():
     """TODO: Receive the user's login credentials located in the 'request.form'
     dictionary, look up the user, and store them in the session."""
-    return "Oops! This needs to be implemented"
+    email = request.form.get("email")
+    print email
+    password = request.form.get("password")
+    print password
+
+    customer = model.get_customer_by_email(email,password)
+    print customer
+
+    if customer == None:
+        flash("No user found for that email/password combination.")
+        return redirect("/login")
+    else:
+        session["logged_in"] = True
+        session["customer_id"] = customer.id
+        session["first_name"] = customer.first
+        session["last_name"] = customer.last
+        flash("Welcome, " + customer.first + ".")
+        return redirect("/melons")
 
 
 @app.route("/checkout")
@@ -94,6 +116,11 @@ def checkout():
     melon listing page."""
     flash("Sorry! Checkout will be implemented in a future version of ubermelon.")
     return redirect("/melons")
+
+@app.route('/clearcart')
+def clear_cart():
+    session['cart'] = {}
+    return redirect("/cart")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
