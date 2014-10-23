@@ -17,7 +17,7 @@
 {%endif%}
 
 </table>
-<!-- <h3>Total: cart </h3> -->
+<h3>Order total: {{ "${:.2f}".format(order_total) }} </h3>
 <a href="/checkout" class="btn btn-large btn-primary">Check Out</a>
 <a href="/clearcart" class="btn btn-large btn-default">Clear Cart</a>
 {% endblock %}

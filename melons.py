@@ -45,11 +45,17 @@ def shopping_cart():
                 melon_dict = {
                     "name": melon.common_name,
                     "price": melon.price,
-                    "quantity": quantity
+                    "quantity": quantity,
+                    "total": melon.price * quantity
                 }
                 melon_details.append(melon_dict)
 
-            return render_template("cart.html", melons = melon_details)
+            order_total = 0
+            for melon in melon_details:
+                order_total += melon['total']
+
+            return render_template("cart.html", melons = melon_details, 
+                                                order_total = order_total)
     else:
         return render_template("cart.html", melons = None)
 
@@ -90,10 +96,9 @@ def show_login():
 def process_login():
     """TODO: Receive the user's login credentials located in the 'request.form'
     dictionary, look up the user, and store them in the session."""
+    
     email = request.form.get("email")
-    print email
     password = request.form.get("password")
-    print password
 
     customer = model.get_customer_by_email(email,password)
     print customer
