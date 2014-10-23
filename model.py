@@ -88,17 +88,11 @@ def get_customer_by_email(email, password):
 
   row = cursor.fetchone()
 
-  if not row: # If row is any kind of 0, empty container... 
+  if not row: 
     return None
   else:
     customer = Customer(row[0],row[1],row[2],row[3])
     return customer
-
-  # else:
-  #   customer.email = 
-
-  # customer = Customer()
-
 
     
 

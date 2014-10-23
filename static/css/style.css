@@ -80,3 +80,12 @@ div.cart {
 img.melon-cart {
   height: 15px;
 }
+
+li#navbar-user {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  color: #999;
+  line-height: 30px;
+  background: 0 0;
+}

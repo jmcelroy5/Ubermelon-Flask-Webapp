@@ -57,7 +57,7 @@ def shopping_cart():
             return render_template("cart.html", melons = melon_details, 
                                                 order_total = order_total)
     else:
-        return render_template("cart.html", melons = None)
+        return render_template("cart.html", melons = None, order_total = 0)
 
 @app.route("/add_to_cart/<int:id>")
 def add_to_cart(id):
@@ -106,13 +106,20 @@ def process_login():
     if customer == None:
         flash("No user found for that email/password combination.")
         return redirect("/login")
-    else:
-        session["logged_in"] = True
-        session["customer_id"] = customer.id
-        session["first_name"] = customer.first
-        session["last_name"] = customer.last
-        flash("Welcome, " + customer.first + ".")
+    else:   # Is there need for a logged_in = True?
+        session["current_user"] = { "logged_in": True,
+                                    "customer_id": customer.id,
+                                    "first_name": customer.first,
+                                    "last_name": customer.last}
+        flash("Welcome, " + session["current_user"]["first_name"] + ".")
         return redirect("/melons")
+
+@app.route("/logout")
+def process_logout():
+    del session["current_user"]
+    # session["current_user"] = {}
+    flash("Logged out.")
+    return redirect("/melons")
 
 
 @app.route("/checkout")
